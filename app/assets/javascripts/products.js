@@ -31,7 +31,7 @@ $(document).ready( function() {
     var name = $('#name').val()
     var base_price = $('#base_price').val()
     var description = $('#description').val()
-    var newitem =  { name: name, base_price: base_price, description: description }
+    var newitem = {product: {name: name, base_price: base_price, description: description } }
     $.ajax({
       url: 'http://json-server.devpointlabs.com/api/v1/products',
       type: 'POST',
