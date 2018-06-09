@@ -67,8 +67,9 @@ $(document).ready( function() {
     $.ajax({
     url: 'http://json-server.devpointlabs.com/api/v1/products/' + id,
     method: 'DELETE'
-    }).done( function(thing) {
-    debugger
+    }).done( function() {
+    var row = $("[data-product-id='" + id + "'")
+    row.remove('li');
     })
   })
 
