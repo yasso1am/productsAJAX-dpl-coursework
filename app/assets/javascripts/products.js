@@ -1,6 +1,6 @@
 $(document).ready( function() {
   const icons = ["3d_rotation", "ac_unit", "access_alarm", "accessibility", "accessible", "account_balance", "account_balance_wallet", "add_shopping_cart", "add_to_queue", "adjust", "airline_seat_legroom_reduced", "airline_seat_recline_extra", "airplanemode_inactive", "airplay", "airport_shuttle", "all_inclusive", "build", "cake", "camera_enhance", "center_focus_weak", "check_circle", "child_friendly", "cloud_queue", "color_lens", "colorize", "control_point_duplicate", "copyright", "create", "credit_card", "crop", "crop_16_9", "dashboard", "delete", "desktop_mac", "desktop_windows", "description", "delete_sweep", "developer_mode"]
-  var check = true
+  let check = true
   var crush = '<button id="delete" >' + 'Delete' + '</button>'
   
   // IMMEDIATE AJAX REQUEST FOR PRODUCTS UPON PAGE LOAD
@@ -43,6 +43,7 @@ $(document).ready( function() {
     
     // TRICKING USER TO BELIEVE ITEM WAS UPDATED ON THE PAGE
   .done( function(item) {
+    var rand = icons[Math.floor(Math.random() * icons.length)];
     if (check){
       var li = '<li class="collection-item avatar" data-product-id="' + item.id +'"> <i class="material-icons">' + rand + '</i> ' + 'Name: ' + item.name + '<br />' +  'Description: ' + item.description + '<br />' + 'Price :' + item.base_price + '<br />' + crush + '</li>'
       $('#product-list').append(li)
@@ -52,13 +53,14 @@ $(document).ready( function() {
       $('#right-product-list').append(li)
       check = true
     }
+
+    // CLEARING INPUT VALUES 
     $('#name').val('')
     $('#base_price').val('')
     $('#description').val('')  
-      }).fail( function(err) {
-        alert(err.responseJSON.errors)
   
-        // CLEARING INPUT VALUES 
+  }).fail( function(err) {
+    alert(err.responseJSON.errors)
     })
   })
 
@@ -67,9 +69,10 @@ $(document).ready( function() {
     $.ajax({
     url: 'http://json-server.devpointlabs.com/api/v1/products/' + id,
     method: 'DELETE'
-    }).done( function() {
+    }).done( function(msg) {
     var row = $("[data-product-id='" + id + "'")
     row.remove('li');
+    alert(msg.message)
     })
   })
 
