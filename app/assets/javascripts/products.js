@@ -15,7 +15,8 @@ $(document).ready( function() {
   }).done( function(products) {
     products.forEach (function (prod) {
       var rand = icons[Math.floor(Math.random() * icons.length)];
-     // ADDING ITEMS LEFT AND RIGHT ACCORDING TO A TRUE/FALSE 
+  
+      // ADDING ITEMS LEFT AND RIGHT ACCORDING TO A TRUE/FALSE 
       if (check){
         var li = '<li class="collection-item avatar" data-product-id="' + prod.id +'"> <i class="material-icons">' + rand + '</i> ' + 'Name: ' + prod.name + '<br />' +  'Description: ' + prod.description + '<br />' + 'Price :' + prod.base_price + '<br />' + crush + change + '</li>'
         $('#product-list').append(li)
@@ -41,6 +42,8 @@ $(document).ready( function() {
         $('#base_price').val(`${product.base_price}`)
         $('#description').val(`${product.description}`)    
         editId = product.id 
+        var row = $("[data-product-id='" + id + "'")
+        row.remove('li')
       })
     })
     
@@ -53,10 +56,10 @@ $(document).ready( function() {
     
     if (editId) {
       var url = 'http://json-server.devpointlabs.com/api/v1/products/' + editId
+      debugger
       var method = 'PUT'
       var item = { product: { base_price: base_price, color: null, description: description, id: editId, name: name, other_attributes: null, quantity_on_hand: 0, weight: null}  }
       var li = $("[data-id='" + editId + "'")
-      debugger
     } else {
         item = { product: {name: name, base_price: base_price, description: description } }
         method = 'POST'
@@ -95,23 +98,16 @@ $(document).ready( function() {
     })
   })
 
+  // DELETING THE ITEM
   $(document).on('click', '#delete', function (){
     var id = this.parentElement.dataset.productId
-    $.ajax({
-    url: 'http://json-server.devpointlabs.com/api/v1/products/' + id,
-    method: 'DELETE'
-    }).done( function(msg) {
-    var row = $("[data-product-id='" + id + "'")
-    row.remove('li');
-    alert(msg.message)
-    })
+      $.ajax({
+        url: 'http://json-server.devpointlabs.com/api/v1/products/' + id,
+        method: 'DELETE'
+      }).done( function(msg) {
+        var row = $("[data-product-id='" + id + "'")
+        row.remove('li');
+        alert(msg.message)
+      })
   })
-
-
-
 })
-
-
-
-
-
