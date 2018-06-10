@@ -1,8 +1,11 @@
+const icons = ["3d_rotation", "ac_unit", "access_alarm", "accessibility", "accessible", "account_balance", "account_balance_wallet", "add_shopping_cart", "add_to_queue", "adjust", "airline_seat_legroom_reduced", "airline_seat_recline_extra", "airplanemode_inactive", "airplay", "airport_shuttle", "all_inclusive", "build", "cake", "camera_enhance", "center_focus_weak", "check_circle", "child_friendly", "cloud_queue", "color_lens", "colorize", "control_point_duplicate", "copyright", "create", "credit_card", "crop", "crop_16_9", "dashboard", "delete", "desktop_mac", "desktop_windows", "description", "delete_sweep", "developer_mode"]
+let check = true
+var crush = '<button id="delete" >' + 'Delete' + '</button>'
+var change = '<button id="edit" >' + 'Edit' + '</button>'
+var editId;
+
 $(document).ready( function() {
-  const icons = ["3d_rotation", "ac_unit", "access_alarm", "accessibility", "accessible", "account_balance", "account_balance_wallet", "add_shopping_cart", "add_to_queue", "adjust", "airline_seat_legroom_reduced", "airline_seat_recline_extra", "airplanemode_inactive", "airplay", "airport_shuttle", "all_inclusive", "build", "cake", "camera_enhance", "center_focus_weak", "check_circle", "child_friendly", "cloud_queue", "color_lens", "colorize", "control_point_duplicate", "copyright", "create", "credit_card", "crop", "crop_16_9", "dashboard", "delete", "desktop_mac", "desktop_windows", "description", "delete_sweep", "developer_mode"]
-  let check = true
-  var crush = '<button id="delete" >' + 'Delete' + '</button>'
-  var change = '<button id="edit" >' + 'Edit' + '</button>'
+  
   
   // IMMEDIATE AJAX REQUEST FOR PRODUCTS UPON PAGE LOAD
   $.ajax({
@@ -37,30 +40,32 @@ $(document).ready( function() {
         $('#name').val(`${product.name}`)
         $('#base_price').val(`${product.base_price}`)
         $('#description').val(`${product.description}`)    
-        var editId = product.id 
-        debugger
+        editId = product.id 
       })
     })
+    
 
-    $('#newitem').on('click', function (editId) {
+    $('#newitem').on('click', function () {
     var name = $('#name').val()
     var base_price = $('#base_price').val()
     var description = $('#description').val()
-    var item = { product: {name: name, base_price: base_price, description: description } }
-    var method = 'POST'
-    var url = 'http://json-server.devpointlabs.com/api/v1/products'
-  
-   // THIS HAPPENS IF THERE IS A PRODUCT ID, IT IS AN UPDATE   
+    // THIS HAPPENS IF THERE IS A PRODUCT ID, IT IS AN UPDATE   
+    
     if (editId) {
+      var url = 'http://json-server.devpointlabs.com/api/v1/products/' + editId
+      var method = 'PUT'
+      var item = { product: { base_price: base_price, color: null, description: description, id: editId, name: name, other_attributes: null, quantity_on_hand: 0, weight: null}  }
+      var li = $("[data-id='" + editId + "'")
       debugger
-        url = 'http://json-server.devpointlabs.com/api/v1/products' + editId
-        method = 'PUT'
-        item = { product: {id: editId, name: name, base_price: base_price, description: description } }
+    } else {
+        item = { product: {name: name, base_price: base_price, description: description } }
+        method = 'POST'
+        url = 'http://json-server.devpointlabs.com/api/v1/products'
       }
  
     // AJAX REQUEST POSTING/UPDATING TO SERVER 
     $.ajax({
-      url: 'http://json-server.devpointlabs.com/api/v1/products',
+      url: url,
       type: method,
       datatype: 'JSON',
       data: item
